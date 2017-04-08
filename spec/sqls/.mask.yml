@@ -1,0 +1,11 @@
+mark: '[mask]'
+targets:
+  - table: 'people'
+    columns: 4
+    indexes:
+      2: "'氏名[mask]'"
+      3: "'email-[mask]@example.com'"
+  - table: 'cats'
+    columns: 3
+    indexes:
+      2: "'Cat name [mask]'"
