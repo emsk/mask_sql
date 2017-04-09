@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require "mask_sql"
+require 'mask_sql'
 
 MaskSql::CLI.start

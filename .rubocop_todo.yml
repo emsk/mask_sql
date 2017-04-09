@@ -92,20 +92,6 @@ Style/SpaceAroundOperators:
   Exclude:
     - 'mask_sql.gemspec'
 
-# Offense count: 31
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, ConsistentQuotesInMultiline.
-# SupportedStyles: single_quotes, double_quotes
-Style/StringLiterals:
-  Exclude:
-    - 'Rakefile'
-    - 'bin/console'
-    - 'exe/mask_sql'
-    - 'lib/mask_sql.rb'
-    - 'lib/mask_sql/version.rb'
-    - 'mask_sql.gemspec'
-    - 'spec/spec_helper.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 Style/UnneededPercentQ:

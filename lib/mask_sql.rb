@@ -1,2 +1,2 @@
-require "mask_sql/version"
-require "mask_sql/cli"
+require 'mask_sql/version'
+require 'mask_sql/cli'
