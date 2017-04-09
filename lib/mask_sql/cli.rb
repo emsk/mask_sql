@@ -23,5 +23,12 @@ module MaskSql
       converter = Converter.new(converter_options)
       converter.mask
     end
+
+    desc 'version, -v, --version', 'Print the version'
+    map %w(-v --version) => :version
+
+    def version
+      puts "mask_sql #{MaskSql::VERSION}"
+    end
   end
 end
