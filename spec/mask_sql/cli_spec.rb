@@ -88,8 +88,20 @@ RSpec.describe MaskSql::CLI do
       it_behaves_like 'a `mask` command with full options'
     end
 
+    context 'given `-i in.sql -o out.sql -c config.yml`' do
+      let(:thor_args) { %w(-i in.sql -o out.sql -c config.yml) }
+      let(:config_file_path) { '/path/to/config.yml' }
+      it_behaves_like 'a `mask` command with full options'
+    end
+
     context 'given `mask --in in.sql --out out.sql --config config.yml`' do
       let(:thor_args) { %w(mask --in in.sql --out out.sql --config config.yml) }
+      let(:config_file_path) { '/path/to/config.yml' }
+      it_behaves_like 'a `mask` command with full options'
+    end
+
+    context 'given `--in in.sql --out out.sql --config config.yml`' do
+      let(:thor_args) { %w(--in in.sql --out out.sql --config config.yml) }
       let(:config_file_path) { '/path/to/config.yml' }
       it_behaves_like 'a `mask` command with full options'
     end
@@ -100,8 +112,20 @@ RSpec.describe MaskSql::CLI do
       it_behaves_like 'a `mask` command with required options'
     end
 
+    context 'given `-i in.sql -o out.sql`' do
+      let(:thor_args) { %w(-i in.sql -o out.sql) }
+      let(:config_file_path) { '/path/to/.mask.yml' }
+      it_behaves_like 'a `mask` command with required options'
+    end
+
     context 'given `mask --in in.sql --out out.sql`' do
       let(:thor_args) { %w(mask --in in.sql --out out.sql) }
+      let(:config_file_path) { '/path/to/.mask.yml' }
+      it_behaves_like 'a `mask` command with required options'
+    end
+
+    context 'given `--in in.sql --out out.sql`' do
+      let(:thor_args) { %w(--in in.sql --out out.sql) }
       let(:config_file_path) { '/path/to/.mask.yml' }
       it_behaves_like 'a `mask` command with required options'
     end
@@ -111,8 +135,18 @@ RSpec.describe MaskSql::CLI do
       it { is_expected.to output("No value provided for required options '--in', '--out'\n").to_stderr }
     end
 
+    context 'given ``' do
+      let(:thor_args) { %w() }
+      it { is_expected.to output("No value provided for required options '--in', '--out'\n").to_stderr }
+    end
+
     context 'given `mask -i in.sql`' do
       let(:thor_args) { %w(mask -i in.sql) }
+      it { is_expected.to output("No value provided for required options '--out'\n").to_stderr }
+    end
+
+    context 'given `-i in.sql`' do
+      let(:thor_args) { %w(-i in.sql) }
       it { is_expected.to output("No value provided for required options '--out'\n").to_stderr }
     end
 
@@ -121,13 +155,28 @@ RSpec.describe MaskSql::CLI do
       it { is_expected.to output("No value provided for required options '--in'\n").to_stderr }
     end
 
+    context 'given `-o out.sql`' do
+      let(:thor_args) { %w(-o out.sql) }
+      it { is_expected.to output("No value provided for required options '--in'\n").to_stderr }
+    end
+
     context 'given `mask -i in.sql -c config.yml`' do
       let(:thor_args) { %w(mask -i in.sql -c config.yml) }
       it { is_expected.to output("No value provided for required options '--out'\n").to_stderr }
     end
 
+    context 'given `-i in.sql -c config.yml`' do
+      let(:thor_args) { %w(-i in.sql -c config.yml) }
+      it { is_expected.to output("No value provided for required options '--out'\n").to_stderr }
+    end
+
     context 'given `mask -o out.sql -c config.yml`' do
       let(:thor_args) { %w(mask -o out.sql -c config.yml) }
+      it { is_expected.to output("No value provided for required options '--in'\n").to_stderr }
+    end
+
+    context 'given `-o out.sql -c config.yml`' do
+      let(:thor_args) { %w(-o out.sql -c config.yml) }
       it { is_expected.to output("No value provided for required options '--in'\n").to_stderr }
     end
 
@@ -158,6 +207,21 @@ RSpec.describe MaskSql::CLI do
 
     context 'given `-h`' do
       let(:thor_args) { %w(-h) }
+      it_behaves_like 'a `help` command'
+    end
+
+    context 'given `h`' do
+      let(:thor_args) { %w(h) }
+      it_behaves_like 'a `help` command'
+    end
+
+    context 'given `he`' do
+      let(:thor_args) { %w(he) }
+      it_behaves_like 'a `help` command'
+    end
+
+    context 'given `hel`' do
+      let(:thor_args) { %w(hel) }
       it_behaves_like 'a `help` command'
     end
 
@@ -203,6 +267,16 @@ RSpec.describe MaskSql::CLI do
         EOS
       end
       it_behaves_like 'a `help` command'
+    end
+
+    context 'given `abc`' do
+      let(:thor_args) { %w(abc) }
+      it { is_expected.to output(%Q(Could not find command "abc".\n)).to_stderr }
+    end
+
+    context 'given `helpp`' do
+      let(:thor_args) { %w(helpp) }
+      it { is_expected.to output(%Q(Could not find command "helpp".\n)).to_stderr }
     end
   end
 end
