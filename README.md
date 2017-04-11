@@ -1,5 +1,7 @@
 # MaskSql
 
+[![Build Status](https://travis-ci.org/emsk/mask_sql.svg?branch=master)](https://travis-ci.org/emsk/mask_sql)
+
 Mask sensitive values in a SQL file.
 
 ## Installation
