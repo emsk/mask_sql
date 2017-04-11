@@ -1,6 +1,7 @@
 # MaskSql
 
 [![Build Status](https://travis-ci.org/emsk/mask_sql.svg?branch=master)](https://travis-ci.org/emsk/mask_sql)
+[![Coverage Status](https://coveralls.io/repos/github/emsk/mask_sql/badge.svg?branch=master)](https://coveralls.io/github/emsk/mask_sql)
 
 Mask sensitive values in a SQL file.
 
