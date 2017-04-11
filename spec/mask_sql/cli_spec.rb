@@ -1,10 +1,10 @@
 RSpec.describe MaskSql::CLI do
   let(:help) do
-    <<~EOS
-      Commands:
-        #{command} help [COMMAND]                                            # Describe available commands or one specific command
-        #{command} mask -i, --in=INPUT FILE PATH -o, --out=OUTPUT FILE PATH  # Mask sensitive values in a SQL file
-        #{command} version, -v, --version                                    # Print the version
+    <<-EOS
+Commands:
+  #{command} help [COMMAND]                                            # Describe available commands or one specific command
+  #{command} mask -i, --in=INPUT FILE PATH -o, --out=OUTPUT FILE PATH  # Mask sensitive values in a SQL file
+  #{command} version, -v, --version                                    # Print the version
 
     EOS
   end
@@ -34,7 +34,7 @@ RSpec.describe MaskSql::CLI do
         expect(File).to receive(:expand_path).with('config.yml').and_return(config_file_path)
       end
 
-      it { is_expected.to raise_error(Errno::ENOENT, "No such file or directory @ rb_sysopen - #{config_file_path}") }
+      it { is_expected.to raise_error(Errno::ENOENT, /No such file or directory( @ rb_sysopen)? - #{config_file_path}/) }
     end
   end
 
@@ -228,16 +228,16 @@ RSpec.describe MaskSql::CLI do
     context 'given `help mask`' do
       let(:thor_args) { %w(help mask) }
       let(:help) do
-        <<~EOS
-          Usage:
-            #{command} mask -i, --in=INPUT FILE PATH -o, --out=OUTPUT FILE PATH
+        <<-EOS
+Usage:
+  #{command} mask -i, --in=INPUT FILE PATH -o, --out=OUTPUT FILE PATH
 
-          Options:
-            -i, --in=INPUT FILE PATH         
-            -o, --out=OUTPUT FILE PATH       
-            -c, [--config=CONFIG FILE PATH]  
+Options:
+  -i, --in=INPUT FILE PATH         
+  -o, --out=OUTPUT FILE PATH       
+  -c, [--config=CONFIG FILE PATH]  
 
-          Mask sensitive values in a SQL file
+Mask sensitive values in a SQL file
         EOS
       end
       it_behaves_like 'a `help` command'
@@ -246,11 +246,11 @@ RSpec.describe MaskSql::CLI do
     context 'given `help version`' do
       let(:thor_args) { %w(help version) }
       let(:help) do
-        <<~EOS
-          Usage:
-            #{command} version, -v, --version
+        <<-EOS
+Usage:
+  #{command} version, -v, --version
 
-          Print the version
+Print the version
         EOS
       end
       it_behaves_like 'a `help` command'
@@ -259,11 +259,11 @@ RSpec.describe MaskSql::CLI do
     context 'given `help help`' do
       let(:thor_args) { %w(help help) }
       let(:help) do
-        <<~EOS
-          Usage:
-            #{command} help [COMMAND]
+        <<-EOS
+Usage:
+  #{command} help [COMMAND]
 
-          Describe available commands or one specific command
+Describe available commands or one specific command
         EOS
       end
       it_behaves_like 'a `help` command'
