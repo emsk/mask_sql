@@ -15,3 +15,12 @@ INSERT INTO `cats` VALUES (1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','C
 INSERT INTO `cats` VALUES (1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3')
 INSERT INTO `cats`VALUES(1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3');
 INSERT INTO cats VALUES (1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3');
+
+INSERT `cats` (`id`, `code`, `name`) VALUES (1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3');
+INSERT `cats` (`id`, `code`, `name`) VALUES (1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3')
+INSERT `cats` (`id`, `code`, `name`)VALUES(1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3');
+INSERT cats (`id`, `code`, `name`) VALUES (1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3');
+INSERT `cats` VALUES (1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3');
+INSERT `cats` VALUES (1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3')
+INSERT `cats`VALUES(1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3');
+INSERT cats VALUES (1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3');

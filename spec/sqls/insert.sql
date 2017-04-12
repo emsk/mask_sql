@@ -15,3 +15,12 @@ INSERT INTO `cats` VALUES (1,'01','Sora'),(2,'02','Hana'),(3,'03','Leo');
 INSERT INTO `cats` VALUES (1,'01','Sora'),(2,'02','Hana'),(3,'03','Leo')
 INSERT INTO `cats`VALUES(1,'01','Sora'),(2,'02','Hana'),(3,'03','Leo');
 INSERT INTO cats VALUES (1,'01','Sora'),(2,'02','Hana'),(3,'03','Leo');
+
+INSERT `cats` (`id`, `code`, `name`) VALUES (1,'01','Sora'),(2,'02','Hana'),(3,'03','Leo');
+INSERT `cats` (`id`, `code`, `name`) VALUES (1,'01','Sora'),(2,'02','Hana'),(3,'03','Leo')
+INSERT `cats` (`id`, `code`, `name`)VALUES(1,'01','Sora'),(2,'02','Hana'),(3,'03','Leo');
+INSERT cats (`id`, `code`, `name`) VALUES (1,'01','Sora'),(2,'02','Hana'),(3,'03','Leo');
+INSERT `cats` VALUES (1,'01','Sora'),(2,'02','Hana'),(3,'03','Leo');
+INSERT `cats` VALUES (1,'01','Sora'),(2,'02','Hana'),(3,'03','Leo')
+INSERT `cats`VALUES(1,'01','Sora'),(2,'02','Hana'),(3,'03','Leo');
+INSERT cats VALUES (1,'01','Sora'),(2,'02','Hana'),(3,'03','Leo');

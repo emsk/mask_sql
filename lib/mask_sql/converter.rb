@@ -25,11 +25,11 @@ module MaskSql
     def write_line(line, output_file)
       @targets.each do |target|
         table = target['table']
-        next unless /\A(INSERT INTO `?#{table}`?.*VALUES\s*)([^;]+)(;?)\Z/ =~ line
+        next unless /\A(INSERT (INTO)?\s*`?#{table}`?.*VALUES\s*)([^;]+)(;?)\Z/ =~ line
 
         prefix = $1
-        all_values = $2
-        suffix = $3
+        all_values = $3
+        suffix = $4
 
         columns = target['columns']
         indexes = target['indexes'].keys
