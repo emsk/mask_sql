@@ -9,12 +9,24 @@ Commands:
     EOS
   end
 
-  shared_examples_for 'a `mask` command with full options' do
+  shared_examples_for 'a `mask` command with full options' do |sql_kinds|
     context 'when the config file exists' do
       let(:config) { YAML.load_file("#{File.dirname(__FILE__)}/../sqls/.mask.yml") }
       let(:out_file) { StringIO.new }
-      let!(:in_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/insert.sql")) }
-      let!(:masked_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/masked_insert.sql")) }
+      let!(:in_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/original.sql")) }
+      let!(:masked_sql) do
+        if sql_kinds.nil?
+          sql_kind = 'insert'
+        elsif sql_kinds[:insert] && sql_kinds[:replace]
+          sql_kind = 'all'
+        elsif sql_kinds[:insert] && !sql_kinds[:replace]
+          sql_kind = 'insert'
+        elsif !sql_kinds[:insert] && sql_kinds[:replace]
+          sql_kind = 'replace'
+        end
+
+        File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/masked_#{sql_kind}.sql"))
+      end
 
       before do
         expect(File).to receive(:expand_path).with('config.yml').and_return(config_file_path)
@@ -42,7 +54,7 @@ Commands:
     context 'when a config file exists in the current directory' do
       let(:config) { YAML.load_file("#{File.dirname(__FILE__)}/../sqls/.mask.yml") }
       let(:out_file) { StringIO.new }
-      let!(:in_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/insert.sql")) }
+      let!(:in_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/original.sql")) }
       let!(:masked_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/masked_insert.sql")) }
 
       before do
@@ -81,6 +93,24 @@ Commands:
     let(:command) { 'mask_sql' }
 
     subject { -> { described_class.start(thor_args) } }
+
+    context 'given `mask -i in.sql -o out.sql -c config.yml --insert --replace`' do
+      let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --insert --replace) }
+      let(:config_file_path) { '/path/to/config.yml' }
+      it_behaves_like 'a `mask` command with full options', insert: true, replace: true
+    end
+
+    context 'given `mask -i in.sql -o out.sql -c config.yml --insert`' do
+      let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --insert) }
+      let(:config_file_path) { '/path/to/config.yml' }
+      it_behaves_like 'a `mask` command with full options'
+    end
+
+    context 'given `mask -i in.sql -o out.sql -c config.yml --replace`' do
+      let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --replace) }
+      let(:config_file_path) { '/path/to/config.yml' }
+      it_behaves_like 'a `mask` command with full options', replace: true
+    end
 
     context 'given `mask -i in.sql -o out.sql -c config.yml`' do
       let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml) }
@@ -233,9 +263,11 @@ Usage:
   #{command} mask -i, --in=INPUT FILE PATH -o, --out=OUTPUT FILE PATH
 
 Options:
-  -i, --in=INPUT FILE PATH         
-  -o, --out=OUTPUT FILE PATH       
-  -c, [--config=CONFIG FILE PATH]  
+  -i, --in=INPUT FILE PATH                            
+  -o, --out=OUTPUT FILE PATH                          
+  -c, [--config=CONFIG FILE PATH]                     
+      [--insert=MASK `INSERT` SQL], [--no-insert]     
+      [--replace=MASK `REPLACE` SQL], [--no-replace]  
 
 Mask sensitive values in a SQL file
         EOS

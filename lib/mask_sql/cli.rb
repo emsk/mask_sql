@@ -9,6 +9,8 @@ module MaskSql
     option :in, type: :string, aliases: '-i', required: true, banner: 'INPUT FILE PATH'
     option :out, type: :string, aliases: '-o', required: true, banner: 'OUTPUT FILE PATH'
     option :config, type: :string, aliases: '-c', banner: 'CONFIG FILE PATH'
+    option :insert, type: :boolean, banner: 'MASK `INSERT` SQL'
+    option :replace, type: :boolean, banner: 'MASK `REPLACE` SQL'
 
     def mask
       converter_options = options.dup

@@ -8,6 +8,7 @@ module MaskSql
       config = YAML.load_file(options[:config])
       @mark = config['mark']
       @targets = config['targets']
+      @options[:insert] = true if options[:insert].nil? && options[:replace].nil?
     end
 
     def mask
@@ -25,11 +26,12 @@ module MaskSql
     def write_line(line, output_file)
       @targets.each do |target|
         table = target['table']
-        next unless /\A(INSERT (INTO)?\s*`?#{table}`?.*VALUES\s*)([^;]+)(;?)\Z/ =~ line
+        matched_line = match_line(line, table)
+        next unless matched_line
 
-        prefix = $1
-        all_values = $3
-        suffix = $4
+        prefix = matched_line[1]
+        all_values = matched_line[3]
+        suffix = matched_line[4]
 
         columns = target['columns']
         indexes = target['indexes'].keys
@@ -49,6 +51,27 @@ module MaskSql
       end
 
       output_file.puts line
+    end
+
+    def match_line(line, table)
+      if @options[:insert]
+        matched_line = sql_regexp(table, :insert).match(line)
+        return matched_line if matched_line
+      end
+
+      if @options[:replace]
+        matched_line = sql_regexp(table, :replace).match(line)
+        return matched_line if matched_line
+      end
+
+      nil
+    end
+
+    def sql_regexp(table, sql_kind)
+      case sql_kind
+      when :insert  then /\A(INSERT (INTO)?\s*`?#{table}`?.*VALUES\s*)([^;]+)(;?)\Z/
+      when :replace then /\A(REPLACE (INTO)?\s*`?#{table}`?.*VALUES\s*)([^;]+)(;?)\Z/
+      end
     end
   end
 end
