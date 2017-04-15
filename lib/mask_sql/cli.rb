@@ -11,6 +11,7 @@ module MaskSql
     option :config, type: :string, aliases: '-c', banner: 'CONFIG FILE PATH'
     option :insert, type: :boolean, banner: 'MASK `INSERT` SQL'
     option :replace, type: :boolean, banner: 'MASK `REPLACE` SQL'
+    option :copy, type: :boolean, banner: 'MASK `COPY` SQL'
 
     def mask
       converter_options = options.dup

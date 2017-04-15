@@ -5,17 +5,23 @@ module MaskSql
   class Converter
     def initialize(options)
       @options = options
+
       config = YAML.load_file(options[:config])
       @mark = config['mark']
       @targets = config['targets']
-      @options[:insert] = true if options[:insert].nil? && options[:replace].nil?
+
+      if options[:insert].nil? && options[:replace].nil? && options[:copy].nil?
+        @options[:insert] = true
+      end
+
+      @matched_copy = {}
     end
 
     def mask
       File.open(@options[:out], 'w') do |out_file|
         File.open(@options[:in], 'r:utf-8') do |in_file|
           in_file.each_line do |line|
-            write_line(line, out_file)
+            @matched_copy.empty? ? write_line(line, out_file) : write_copy_line(line, out_file)
           end
         end
       end
@@ -28,6 +34,14 @@ module MaskSql
         table = target['table']
         matched_line = match_line(line, table)
         next unless matched_line
+
+        if matched_line.names.include?('copy_sql')
+          output_file.puts line
+          @matched_copy[:sql] = matched_line[:copy_sql]
+          @matched_copy[:indexes] = target['indexes']
+          @matched_copy[:record_index] = 1
+          return
+        end
 
         columns = target['columns']
         indexes = target['indexes'].keys
@@ -49,6 +63,24 @@ module MaskSql
       output_file.puts line
     end
 
+    def write_copy_line(line, output_file)
+      if /\A\\.\Z/ =~ line
+        output_file.puts line
+        @matched_copy.clear
+        return
+      end
+
+      record_values = CSV.parse(line, col_sep: "\t")[0]
+      @matched_copy[:indexes].each do |mask_index, mask_value|
+        record_values[mask_index] = mask_value.gsub(/\A'/, '')
+          .gsub(/'\z/, '')
+          .gsub(@mark, @matched_copy[:record_index].to_s)
+      end
+
+      output_file.puts record_values.join("\t")
+      @matched_copy[:record_index] += 1
+    end
+
     def match_line(line, table)
       if @options[:insert]
         matched_line = sql_regexp(table, :insert).match(line)
@@ -57,6 +89,11 @@ module MaskSql
 
       if @options[:replace]
         matched_line = sql_regexp(table, :replace).match(line)
+        return matched_line if matched_line
+      end
+
+      if @options[:copy]
+        matched_line = sql_regexp(table, :copy).match(line)
         return matched_line if matched_line
       end
 
@@ -69,6 +106,8 @@ module MaskSql
         /\A(?<prefix>INSERT (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)\Z/
       when :replace
         /\A(?<prefix>REPLACE (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)\Z/
+      when :copy
+        /(?<copy_sql>COPY\s*`?#{table}`?.*FROM stdin;)/
       end
     end
   end

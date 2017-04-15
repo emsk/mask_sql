@@ -17,12 +17,14 @@ Commands:
       let!(:masked_sql) do
         if sql_kinds.nil?
           sql_kind = 'insert'
-        elsif sql_kinds[:insert] && sql_kinds[:replace]
+        elsif sql_kinds[:insert] && sql_kinds[:replace] && sql_kinds[:copy]
           sql_kind = 'all'
-        elsif sql_kinds[:insert] && !sql_kinds[:replace]
+        elsif sql_kinds[:insert] && !sql_kinds[:replace] && !sql_kinds[:copy]
           sql_kind = 'insert'
-        elsif !sql_kinds[:insert] && sql_kinds[:replace]
+        elsif !sql_kinds[:insert] && sql_kinds[:replace] && !sql_kinds[:copy]
           sql_kind = 'replace'
+        elsif !sql_kinds[:insert] && !sql_kinds[:replace] && sql_kinds[:copy]
+          sql_kind = 'copy'
         end
 
         File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/masked_#{sql_kind}.sql"))
@@ -94,10 +96,10 @@ Commands:
 
     subject { -> { described_class.start(thor_args) } }
 
-    context 'given `mask -i in.sql -o out.sql -c config.yml --insert --replace`' do
-      let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --insert --replace) }
+    context 'given `mask -i in.sql -o out.sql -c config.yml --insert --replace --copy`' do
+      let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --insert --replace --copy) }
       let(:config_file_path) { '/path/to/config.yml' }
-      it_behaves_like 'a `mask` command with full options', insert: true, replace: true
+      it_behaves_like 'a `mask` command with full options', insert: true, replace: true, copy: true
     end
 
     context 'given `mask -i in.sql -o out.sql -c config.yml --insert`' do
@@ -110,6 +112,12 @@ Commands:
       let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --replace) }
       let(:config_file_path) { '/path/to/config.yml' }
       it_behaves_like 'a `mask` command with full options', replace: true
+    end
+
+    context 'given `mask -i in.sql -o out.sql -c config.yml --copy`' do
+      let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --copy) }
+      let(:config_file_path) { '/path/to/config.yml' }
+      it_behaves_like 'a `mask` command with full options', copy: true
     end
 
     context 'given `mask -i in.sql -o out.sql -c config.yml`' do
@@ -268,6 +276,7 @@ Options:
   -c, [--config=CONFIG FILE PATH]                     
       [--insert=MASK `INSERT` SQL], [--no-insert]     
       [--replace=MASK `REPLACE` SQL], [--no-replace]  
+      [--copy=MASK `COPY` SQL], [--no-copy]           
 
 Mask sensitive values in a SQL file
         EOS

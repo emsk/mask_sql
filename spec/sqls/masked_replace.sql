@@ -51,3 +51,15 @@ REPLACE `cats` VALUES (1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat n
 REPLACE `cats` VALUES (1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3')
 REPLACE `cats`VALUES(1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3');
 REPLACE cats VALUES (1,'01','Cat name 1'),(2,'02','Cat name 2'),(3,'03','Cat name 3');
+
+COPY people (id, code, name, email) FROM stdin;
+1	01	坂本龍馬	ryoma-sakamoto@example.com
+2	02	高杉晋作	shinsaku-takasugi@example.com
+3	03	沖田総司	soji-okita@example.com
+\.
+
+COPY cats (id, code, name) FROM stdin;
+1	01	Sora
+2	02	Hana
+3	03	Leo
+\.
