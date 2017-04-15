@@ -29,14 +29,10 @@ module MaskSql
         matched_line = match_line(line, table)
         next unless matched_line
 
-        prefix = matched_line[1]
-        all_values = matched_line[3]
-        suffix = matched_line[4]
-
         columns = target['columns']
         indexes = target['indexes'].keys
 
-        record_values = CSV.parse(all_values)[0].each_slice(columns).to_a
+        record_values = CSV.parse(matched_line[:all_values])[0].each_slice(columns).to_a
         record_values.map!.with_index(1) do |values, record_index|
           indexes.each do |mask_index|
             values[mask_index] = target['indexes'][mask_index].gsub(@mark, record_index.to_s)
@@ -46,7 +42,7 @@ module MaskSql
           values
         end
 
-        output_file.puts "#{prefix}#{record_values.join(',')}#{suffix}"
+        output_file.puts "#{matched_line[:prefix]}#{record_values.join(',')}#{matched_line[:suffix]}"
         return
       end
 
@@ -69,8 +65,10 @@ module MaskSql
 
     def sql_regexp(table, sql_kind)
       case sql_kind
-      when :insert  then /\A(INSERT (INTO)?\s*`?#{table}`?.*VALUES\s*)([^;]+)(;?)\Z/
-      when :replace then /\A(REPLACE (INTO)?\s*`?#{table}`?.*VALUES\s*)([^;]+)(;?)\Z/
+      when :insert
+        /\A(?<prefix>INSERT (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)\Z/
+      when :replace
+        /\A(?<prefix>REPLACE (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)\Z/
       end
     end
   end
