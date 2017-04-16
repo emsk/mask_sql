@@ -13,6 +13,8 @@ module MaskSQL
 
       if options[:insert].nil? && options[:replace].nil? && options[:copy].nil?
         @options[:insert] = true
+        @options[:replace] = true
+        @options[:copy] = true
       end
 
       @matched_copy = {}

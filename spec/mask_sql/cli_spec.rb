@@ -14,9 +14,7 @@ Commands:
       let(:config) { YAML.load_file("#{File.dirname(__FILE__)}/../sqls/.mask.yml") }
       let(:out_file) { StringIO.new }
       let(:sql_kind) do
-        if options.nil?
-          'insert'
-        elsif options[:insert] && options[:replace] && options[:copy]
+        if options.nil? || (options[:insert].nil? && options[:replace].nil? && options[:copy].nil?)
           'all'
         elsif options[:insert] && !options[:replace] && !options[:copy]
           'insert'
@@ -66,7 +64,7 @@ Commands:
       let(:config) { YAML.load_file("#{File.dirname(__FILE__)}/../sqls/.mask.yml") }
       let(:out_file) { StringIO.new }
       let!(:in_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/original.sql")) }
-      let!(:masked_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/masked_insert.sql")) }
+      let!(:masked_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/masked_all.sql")) }
 
       before do
         expect(File).to receive(:expand_path).with('.mask.yml').and_return(config_file_path)
@@ -111,18 +109,18 @@ Commands:
       let(:config_file_path) { '/path/to/config.yml' }
 
       context 'when the input file encoding is UTF-8' do
-        it_behaves_like 'a `mask` command with full options', insert: true, replace: true, copy: true
+        it_behaves_like 'a `mask` command with full options'
       end
 
       context 'when the input file encoding is Shift_JIS' do
-        it_behaves_like 'a `mask` command with full options', insert: true, replace: true, copy: true, encoding: 'sjis'
+        it_behaves_like 'a `mask` command with full options', encoding: 'sjis'
       end
     end
 
     context 'given `mask -i in.sql -o out.sql -c config.yml --insert`' do
       let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --insert) }
       let(:config_file_path) { '/path/to/config.yml' }
-      it_behaves_like 'a `mask` command with full options'
+      it_behaves_like 'a `mask` command with full options', insert: true
     end
 
     context 'given `mask -i in.sql -o out.sql -c config.yml --replace`' do
