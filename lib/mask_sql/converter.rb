@@ -80,8 +80,8 @@ module MaskSQL
 
       record_values = CSV.parse(line, col_sep: "\t")[0]
       @matched_copy[:indexes].each do |mask_index, mask_value|
-        record_values[mask_index] = mask_value.gsub(/\A'/, '')
-          .gsub(/'\z/, '')
+        record_values[mask_index] = mask_value.sub(/\A'/, '')
+          .sub(/'\z/, '')
           .gsub(@mark, @matched_copy[:record_index].to_s)
       end
 
