@@ -16,6 +16,15 @@ INSERT INTO `cats` VALUES ('01','Sora'),('02','Hana'),('03','Leo')
 INSERT INTO `cats`VALUES('01','Sora'),('02','Hana'),('03','Leo');
 INSERT INTO cats VALUES ('01','Sora'),('02','Hana'),('03','Leo');
 
+insert into `cats` (`code`, `name`) values ('01','Sora'),('02','Hana'),('03','Leo');
+insert into `cats` (`code`, `name`) values ('01','Sora'),('02','Hana'),('03','Leo')
+insert into `cats` (`code`, `name`)values('01','Sora'),('02','Hana'),('03','Leo');
+insert into cats (`code`, `name`) values ('01','Sora'),('02','Hana'),('03','Leo');
+insert into `cats` values ('01','Sora'),('02','Hana'),('03','Leo');
+insert into `cats` values ('01','Sora'),('02','Hana'),('03','Leo')
+insert into `cats`values('01','Sora'),('02','Hana'),('03','Leo');
+insert into cats values ('01','Sora'),('02','Hana'),('03','Leo');
+
 INSERT `cats` (`code`, `name`) VALUES ('01','Sora'),('02','Hana'),('03','Leo');
 INSERT `cats` (`code`, `name`) VALUES ('01','Sora'),('02','Hana'),('03','Leo')
 INSERT `cats` (`code`, `name`)VALUES('01','Sora'),('02','Hana'),('03','Leo');
@@ -43,6 +52,15 @@ REPLACE INTO `cats` VALUES ('code-1','Cat name 1'),('code-2','Cat name 2'),('cod
 REPLACE INTO `cats`VALUES('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3');
 REPLACE INTO cats VALUES ('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3');
 
+replace into `cats` (`code`, `name`) values ('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3');
+replace into `cats` (`code`, `name`) values ('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3')
+replace into `cats` (`code`, `name`)values('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3');
+replace into cats (`code`, `name`) values ('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3');
+replace into `cats` values ('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3');
+replace into `cats` values ('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3')
+replace into `cats`values('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3');
+replace into cats values ('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3');
+
 REPLACE `cats` (`code`, `name`) VALUES ('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3');
 REPLACE `cats` (`code`, `name`) VALUES ('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3')
 REPLACE `cats` (`code`, `name`)VALUES('code-1','Cat name 1'),('code-2','Cat name 2'),('code-3','Cat name 3');
@@ -59,6 +77,12 @@ COPY people (id, code, name, email) FROM stdin;
 \.
 
 COPY cats (code, name) FROM stdin;
+01	Sora
+02	Hana
+03	Leo
+\.
+
+copy cats (code, name) from stdin;
 01	Sora
 02	Hana
 03	Leo

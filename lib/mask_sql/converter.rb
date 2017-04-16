@@ -111,11 +111,11 @@ module MaskSQL
     def sql_regexp(table, sql_kind)
       case sql_kind
       when :insert
-        /\A(?<prefix>INSERT (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)\Z/
+        /\A(?<prefix>INSERT (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)\Z/i
       when :replace
-        /\A(?<prefix>REPLACE (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)\Z/
+        /\A(?<prefix>REPLACE (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)\Z/i
       when :copy
-        /(?<copy_sql>COPY\s*`?#{table}`?.*FROM stdin;)/
+        /(?<copy_sql>COPY\s*`?#{table}`?.*FROM stdin;)/i
       end
     end
   end
