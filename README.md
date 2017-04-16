@@ -16,7 +16,47 @@ WIP
 ## Usage
 
 ```sh
-$ mask_sql -i insert.sql -o masked_insert.sql -c .mask.yml
+$ mask_sql --in dump.sql --out masked_dump.sql --config mask_config.yml
+```
+
+## Command Options
+
+| Option | Description | Default |
+| :----- | :---------- | :------ |
+| `-i` / `--in` | Input file path (Required) | |
+| `-o` / `--out` | Output file path (Required) | |
+| `-c` / `--config` | Config YAML file path | `.mask.yml` in the working directory |
+| `--insert` | `true` if mask `INSERT` SQL | `false`, but `true` if `--replace` and `--copy` options are not given |
+| `--replace` | `true` if mask `REPLACE` SQL | `false`, but `true` if `--insert` and `--copy` options are not given |
+| `--copy` | `true` if mask `COPY` SQL | `false`, but `true` if `--insert` and `--replace` options are not given |
+
+## Config
+
+The following keys are needed in the config file.
+
+| Key | Description | Type |
+| :-- | :---------- | :--- |
+| `mark` | Replacement text | String |
+| `targets` | Array of targets | Array |
+| `table` | Target table name | String |
+| `columns` | Columns count of the table | Integer |
+| `indexes` | Target column index (zero-based) and masking text | Hash |
+
+The following code is an example of the config file.
+
+```yaml
+mark: '[mask]'
+targets:
+  - table: people
+    columns: 4
+    indexes:
+      2: 氏名[mask]
+      3: email-[mask]@example.com
+  - table: cats
+    columns: 2
+    indexes:
+      0: code-[mask]
+      1: Cat name [mask]
 ```
 
 ## Supported Ruby Versions
