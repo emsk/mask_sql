@@ -1,5 +1,6 @@
 require 'csv'
 require 'yaml'
+require 'nkf'
 
 module MaskSQL
   class Converter
@@ -18,8 +19,10 @@ module MaskSQL
     end
 
     def mask
-      File.open(@options[:out], 'w') do |out_file|
-        File.open(@options[:in], 'r:utf-8') do |in_file|
+      encoding = NKF.guess(File.read(@options[:in])).name
+
+      File.open(@options[:out], "w:#{encoding}") do |out_file|
+        File.open(@options[:in], "r:#{encoding}") do |in_file|
           in_file.each_line do |line|
             @matched_copy.empty? ? write_line(line, out_file) : write_copy_line(line, out_file)
           end

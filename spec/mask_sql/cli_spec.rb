@@ -9,32 +9,41 @@ Commands:
     EOS
   end
 
-  shared_examples_for 'a `mask` command with full options' do |sql_kinds|
+  shared_examples_for 'a `mask` command with full options' do |options|
     context 'when the config file exists' do
       let(:config) { YAML.load_file("#{File.dirname(__FILE__)}/../sqls/.mask.yml") }
       let(:out_file) { StringIO.new }
-      let!(:in_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/original.sql")) }
-      let!(:masked_sql) do
-        if sql_kinds.nil?
-          sql_kind = 'insert'
-        elsif sql_kinds[:insert] && sql_kinds[:replace] && sql_kinds[:copy]
-          sql_kind = 'all'
-        elsif sql_kinds[:insert] && !sql_kinds[:replace] && !sql_kinds[:copy]
-          sql_kind = 'insert'
-        elsif !sql_kinds[:insert] && sql_kinds[:replace] && !sql_kinds[:copy]
-          sql_kind = 'replace'
-        elsif !sql_kinds[:insert] && !sql_kinds[:replace] && sql_kinds[:copy]
-          sql_kind = 'copy'
+      let(:sql_kind) do
+        if options.nil?
+          'insert'
+        elsif options[:insert] && options[:replace] && options[:copy]
+          'all'
+        elsif options[:insert] && !options[:replace] && !options[:copy]
+          'insert'
+        elsif !options[:insert] && options[:replace] && !options[:copy]
+          'replace'
+        elsif !options[:insert] && !options[:replace] && options[:copy]
+          'copy'
         end
+      end
 
-        File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/masked_#{sql_kind}.sql"))
+      if options.nil? || options[:encoding].nil? || options[:encoding] == 'utf8'
+        let!(:external_encoding) { Encoding::UTF_8.name }
+        let!(:in_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/original.sql")) }
+        let!(:masked_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/masked_#{sql_kind}.sql")) }
+      elsif options[:encoding] == 'sjis'
+        let!(:external_encoding) { Encoding::Shift_JIS.name }
+        let!(:in_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/original_sjis.sql"), encoding: Encoding::Shift_JIS) }
+        let!(:masked_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/masked_#{sql_kind}_sjis.sql"), encoding: Encoding::Shift_JIS) }
       end
 
       before do
+        out_file.set_encoding(external_encoding)
         expect(File).to receive(:expand_path).with('config.yml').and_return(config_file_path)
         expect(YAML).to receive(:load_file).with(config_file_path).and_return(config)
-        expect(File).to receive(:open).with('out.sql', 'w').and_yield(out_file)
-        expect(File).to receive(:open).with('in.sql', 'r:utf-8').and_yield(in_sql)
+        expect(File).to receive(:read).with('in.sql').and_return(in_sql)
+        expect(File).to receive(:open).with('out.sql', "w:#{external_encoding}").and_yield(out_file)
+        expect(File).to receive(:open).with('in.sql', "r:#{external_encoding}").and_yield(in_sql)
 
         described_class.start(thor_args)
       end
@@ -63,8 +72,9 @@ Commands:
         expect(File).to receive(:expand_path).with('.mask.yml').and_return(config_file_path)
         expect(File).to receive(:exist?).with(config_file_path).and_return(true)
         expect(YAML).to receive(:load_file).with(config_file_path).and_return(config)
-        expect(File).to receive(:open).with('out.sql', 'w').and_yield(out_file)
-        expect(File).to receive(:open).with('in.sql', 'r:utf-8').and_yield(in_sql)
+        expect(File).to receive(:read).with('in.sql').and_return(in_sql)
+        expect(File).to receive(:open).with('out.sql', 'w:UTF-8').and_yield(out_file)
+        expect(File).to receive(:open).with('in.sql', 'r:UTF-8').and_yield(in_sql)
 
         described_class.start(thor_args)
       end
@@ -99,7 +109,14 @@ Commands:
     context 'given `mask -i in.sql -o out.sql -c config.yml --insert --replace --copy`' do
       let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --insert --replace --copy) }
       let(:config_file_path) { '/path/to/config.yml' }
-      it_behaves_like 'a `mask` command with full options', insert: true, replace: true, copy: true
+
+      context 'when the input file encoding is UTF-8' do
+        it_behaves_like 'a `mask` command with full options', insert: true, replace: true, copy: true
+      end
+
+      context 'when the input file encoding is Shift_JIS' do
+        it_behaves_like 'a `mask` command with full options', insert: true, replace: true, copy: true, encoding: 'sjis'
+      end
     end
 
     context 'given `mask -i in.sql -o out.sql -c config.yml --insert`' do
