@@ -54,7 +54,10 @@ module MaskSQL
         record_values = CSV.parse(matched_line[:all_values])[0].each_slice(columns).to_a
         record_values.map!.with_index(1) do |values, record_index|
           indexes.each do |mask_index|
+            before_value = values[mask_index]
             values[mask_index] = target['indexes'][mask_index].gsub(@mark, record_index.to_s)
+            values[mask_index].insert(0, "'") if before_value.start_with?("'", "('")
+            values[mask_index].insert(-1, "'") if before_value.end_with?("'", "')")
             values[mask_index].insert(0, '(') if mask_index == 0
             values[mask_index].insert(-1, ')') if mask_index == columns - 1
           end
