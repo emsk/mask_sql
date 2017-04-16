@@ -2,4 +2,4 @@
 
 require 'mask_sql'
 
-MaskSql::CLI.start
+MaskSQL::CLI.start

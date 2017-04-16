@@ -1,7 +1,7 @@
 require 'thor'
 require 'mask_sql/converter'
 
-module MaskSql
+module MaskSQL
   class CLI < Thor
     default_command :mask
 
@@ -31,7 +31,7 @@ module MaskSql
     map %w(-v --version) => :version
 
     def version
-      puts "mask_sql #{MaskSql::VERSION}"
+      puts "mask_sql #{MaskSQL::VERSION}"
     end
   end
 end

@@ -5,7 +5,7 @@ require 'mask_sql/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'mask_sql'
-  spec.version       = MaskSql::VERSION
+  spec.version       = MaskSQL::VERSION
   spec.authors       = ['emsk']
   spec.email         = ['emsk1987@gmail.com']
 

@@ -1,4 +1,4 @@
-RSpec.describe MaskSql do
+RSpec.describe MaskSQL do
   describe 'VERSION' do
     subject { described_class::VERSION }
     it { is_expected.not_to be_nil }

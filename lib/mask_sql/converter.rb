@@ -1,7 +1,7 @@
 require 'csv'
 require 'yaml'
 
-module MaskSql
+module MaskSQL
   class Converter
     def initialize(options)
       @options = options

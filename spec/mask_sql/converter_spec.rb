@@ -1,2 +1,2 @@
-RSpec.describe MaskSql::Converter do
+RSpec.describe MaskSQL::Converter do
 end
