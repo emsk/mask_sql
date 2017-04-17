@@ -7,7 +7,7 @@
 [![Inline docs](http://inch-ci.org/github/emsk/mask_sql.svg?branch=master)](http://inch-ci.org/github/emsk/mask_sql)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
 
-Mask sensitive values in a SQL file.
+MaskSQL is a command-line tool to mask sensitive values in a SQL file.
 
 ## Installation
 
@@ -21,14 +21,14 @@ $ mask_sql --in dump.sql --out masked_dump.sql --config mask_config.yml
 
 ## Command Options
 
-| Option | Description | Default |
-| :----- | :---------- | :------ |
-| `-i` / `--in` | Input file path (Required) | |
-| `-o` / `--out` | Output file path (Required) | |
-| `-c` / `--config` | Config YAML file path | `.mask.yml` in the working directory |
-| `--insert` | `true` if mask `INSERT` SQL | `false`, but `true` if `--insert`, `--replace` and `--copy` options are not given |
-| `--replace` | `true` if mask `REPLACE` SQL | `false`, but `true` if `--insert`, `--replace` and `--copy` options are not given |
-| `--copy` | `true` if mask `COPY` SQL | `false`, but `true` if `--insert`, `--replace` and `--copy` options are not given |
+| Option | Alias | Description | Default |
+| :----- | :---- | :---------- | :------ |
+| `--in` | `-i` | Input file path (Required) | |
+| `--out` | `-o` | Output file path (Required) | |
+| `--config` | `-c` | Config YAML file path | `.mask.yml` in the working directory |
+| `--insert` | | `true` if mask `INSERT` SQL | `false`, but `true` if `--insert`, `--replace`, and `--copy` options are not given |
+| `--replace` | | `true` if mask `REPLACE` SQL | `false`, but `true` if `--insert`, `--replace`, and `--copy` options are not given |
+| `--copy` | | `true` if mask `COPY` SQL | `false`, but `true` if `--insert`, `--replace`, and `--copy` options are not given |
 
 ## Config
 
@@ -43,23 +43,6 @@ The following keys are needed in the config YAML file.
 | `indexes` | Target column index (zero-based) and masking text | Hash |
 
 ## Examples
-
-Config file:
-
-```yaml
-mark: '[mask]'
-targets:
-  - table: people
-    columns: 4
-    indexes:
-      2: 氏名[mask]
-      3: email-[mask]@example.com
-  - table: cats
-    columns: 2
-    indexes:
-      0: code-[mask]
-      1: Cat name [mask]
-```
 
 Input file (includes sensitive values):
 
@@ -101,6 +84,23 @@ code-1	Cat name 1
 code-2	Cat name 2
 code-3	Cat name 3
 \.
+```
+
+Config file:
+
+```yaml
+mark: '[mask]'
+targets:
+  - table: people
+    columns: 4
+    indexes:
+      2: 氏名[mask]
+      3: email-[mask]@example.com
+  - table: cats
+    columns: 2
+    indexes:
+      0: code-[mask]
+      1: Cat name [mask]
 ```
 
 ## Supported Ruby Versions
