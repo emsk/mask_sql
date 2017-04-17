@@ -11,7 +11,23 @@ MaskSQL is a command-line tool to mask sensitive values in a SQL file.
 
 ## Installation
 
-WIP
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'mask_sql'
+```
+
+And then execute:
+
+```sh
+$ bundle
+```
+
+Or install it yourself as:
+
+```sh
+$ gem install mask_sql
+```
 
 ## Usage
 
