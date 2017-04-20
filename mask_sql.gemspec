@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['emsk']
   spec.email         = ['emsk1987@gmail.com']
 
-  spec.summary       = %q(Mask sensitive values in a SQL file)
-  spec.description   = %q(MaskSQL is a command-line tool to mask sensitive values in a SQL file)
+  spec.summary       = 'Mask sensitive values in a SQL file'
+  spec.description   = 'MaskSQL is a command-line tool to mask sensitive values in a SQL file'
   spec.homepage      = 'https://github.com/emsk/mask_sql'
   spec.license       = 'MIT'
 

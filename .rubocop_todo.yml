@@ -87,9 +87,3 @@ Style/SpaceAroundOperators:
 Style/TrailingWhitespace:
   Exclude:
     - 'spec/mask_sql/cli_spec.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/UnneededPercentQ:
-  Exclude:
-    - 'mask_sql.gemspec'
