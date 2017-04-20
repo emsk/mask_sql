@@ -105,7 +105,7 @@ Commands:
     subject { -> { described_class.start(thor_args) } }
 
     context 'given `mask -i in.sql -o out.sql -c config.yml --insert --replace --copy`' do
-      let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --insert --replace --copy) }
+      let(:thor_args) { %w[mask -i in.sql -o out.sql -c config.yml --insert --replace --copy] }
       let(:config_file_path) { '/path/to/config.yml' }
 
       context 'when the input file encoding is UTF-8' do
@@ -118,168 +118,168 @@ Commands:
     end
 
     context 'given `mask -i in.sql -o out.sql -c config.yml --insert`' do
-      let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --insert) }
+      let(:thor_args) { %w[mask -i in.sql -o out.sql -c config.yml --insert] }
       let(:config_file_path) { '/path/to/config.yml' }
       it_behaves_like 'a `mask` command with full options', insert: true
     end
 
     context 'given `mask -i in.sql -o out.sql -c config.yml --replace`' do
-      let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --replace) }
+      let(:thor_args) { %w[mask -i in.sql -o out.sql -c config.yml --replace] }
       let(:config_file_path) { '/path/to/config.yml' }
       it_behaves_like 'a `mask` command with full options', replace: true
     end
 
     context 'given `mask -i in.sql -o out.sql -c config.yml --copy`' do
-      let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml --copy) }
+      let(:thor_args) { %w[mask -i in.sql -o out.sql -c config.yml --copy] }
       let(:config_file_path) { '/path/to/config.yml' }
       it_behaves_like 'a `mask` command with full options', copy: true
     end
 
     context 'given `mask -i in.sql -o out.sql -c config.yml`' do
-      let(:thor_args) { %w(mask -i in.sql -o out.sql -c config.yml) }
+      let(:thor_args) { %w[mask -i in.sql -o out.sql -c config.yml] }
       let(:config_file_path) { '/path/to/config.yml' }
       it_behaves_like 'a `mask` command with full options'
     end
 
     context 'given `-i in.sql -o out.sql -c config.yml`' do
-      let(:thor_args) { %w(-i in.sql -o out.sql -c config.yml) }
+      let(:thor_args) { %w[-i in.sql -o out.sql -c config.yml] }
       let(:config_file_path) { '/path/to/config.yml' }
       it_behaves_like 'a `mask` command with full options'
     end
 
     context 'given `mask --in in.sql --out out.sql --config config.yml`' do
-      let(:thor_args) { %w(mask --in in.sql --out out.sql --config config.yml) }
+      let(:thor_args) { %w[mask --in in.sql --out out.sql --config config.yml] }
       let(:config_file_path) { '/path/to/config.yml' }
       it_behaves_like 'a `mask` command with full options'
     end
 
     context 'given `--in in.sql --out out.sql --config config.yml`' do
-      let(:thor_args) { %w(--in in.sql --out out.sql --config config.yml) }
+      let(:thor_args) { %w[--in in.sql --out out.sql --config config.yml] }
       let(:config_file_path) { '/path/to/config.yml' }
       it_behaves_like 'a `mask` command with full options'
     end
 
     context 'given `mask -i in.sql -o out.sql`' do
-      let(:thor_args) { %w(mask -i in.sql -o out.sql) }
+      let(:thor_args) { %w[mask -i in.sql -o out.sql] }
       let(:config_file_path) { '/path/to/.mask.yml' }
       it_behaves_like 'a `mask` command with required options'
     end
 
     context 'given `-i in.sql -o out.sql`' do
-      let(:thor_args) { %w(-i in.sql -o out.sql) }
+      let(:thor_args) { %w[-i in.sql -o out.sql] }
       let(:config_file_path) { '/path/to/.mask.yml' }
       it_behaves_like 'a `mask` command with required options'
     end
 
     context 'given `mask --in in.sql --out out.sql`' do
-      let(:thor_args) { %w(mask --in in.sql --out out.sql) }
+      let(:thor_args) { %w[mask --in in.sql --out out.sql] }
       let(:config_file_path) { '/path/to/.mask.yml' }
       it_behaves_like 'a `mask` command with required options'
     end
 
     context 'given `--in in.sql --out out.sql`' do
-      let(:thor_args) { %w(--in in.sql --out out.sql) }
+      let(:thor_args) { %w[--in in.sql --out out.sql] }
       let(:config_file_path) { '/path/to/.mask.yml' }
       it_behaves_like 'a `mask` command with required options'
     end
 
     context 'given `mask`' do
-      let(:thor_args) { %w(mask) }
+      let(:thor_args) { %w[mask] }
       it { is_expected.to output("No value provided for required options '--in', '--out'\n").to_stderr }
     end
 
     context 'given ``' do
-      let(:thor_args) { %w() }
+      let(:thor_args) { %w[] }
       it { is_expected.to output("No value provided for required options '--in', '--out'\n").to_stderr }
     end
 
     context 'given `mask -i in.sql`' do
-      let(:thor_args) { %w(mask -i in.sql) }
+      let(:thor_args) { %w[mask -i in.sql] }
       it { is_expected.to output("No value provided for required options '--out'\n").to_stderr }
     end
 
     context 'given `-i in.sql`' do
-      let(:thor_args) { %w(-i in.sql) }
+      let(:thor_args) { %w[-i in.sql] }
       it { is_expected.to output("No value provided for required options '--out'\n").to_stderr }
     end
 
     context 'given `mask -o out.sql`' do
-      let(:thor_args) { %w(mask -o out.sql) }
+      let(:thor_args) { %w[mask -o out.sql] }
       it { is_expected.to output("No value provided for required options '--in'\n").to_stderr }
     end
 
     context 'given `-o out.sql`' do
-      let(:thor_args) { %w(-o out.sql) }
+      let(:thor_args) { %w[-o out.sql] }
       it { is_expected.to output("No value provided for required options '--in'\n").to_stderr }
     end
 
     context 'given `mask -i in.sql -c config.yml`' do
-      let(:thor_args) { %w(mask -i in.sql -c config.yml) }
+      let(:thor_args) { %w[mask -i in.sql -c config.yml] }
       it { is_expected.to output("No value provided for required options '--out'\n").to_stderr }
     end
 
     context 'given `-i in.sql -c config.yml`' do
-      let(:thor_args) { %w(-i in.sql -c config.yml) }
+      let(:thor_args) { %w[-i in.sql -c config.yml] }
       it { is_expected.to output("No value provided for required options '--out'\n").to_stderr }
     end
 
     context 'given `mask -o out.sql -c config.yml`' do
-      let(:thor_args) { %w(mask -o out.sql -c config.yml) }
+      let(:thor_args) { %w[mask -o out.sql -c config.yml] }
       it { is_expected.to output("No value provided for required options '--in'\n").to_stderr }
     end
 
     context 'given `-o out.sql -c config.yml`' do
-      let(:thor_args) { %w(-o out.sql -c config.yml) }
+      let(:thor_args) { %w[-o out.sql -c config.yml] }
       it { is_expected.to output("No value provided for required options '--in'\n").to_stderr }
     end
 
     context 'given `version`' do
-      let(:thor_args) { %w(version) }
+      let(:thor_args) { %w[version] }
       it { is_expected.to output("#{command} #{MaskSQL::VERSION}\n").to_stdout }
     end
 
     context 'given `--version`' do
-      let(:thor_args) { %w(--version) }
+      let(:thor_args) { %w[--version] }
       it { is_expected.to output("#{command} #{MaskSQL::VERSION}\n").to_stdout }
     end
 
     context 'given `-v`' do
-      let(:thor_args) { %w(-v) }
+      let(:thor_args) { %w[-v] }
       it { is_expected.to output("#{command} #{MaskSQL::VERSION}\n").to_stdout }
     end
 
     context 'given `help`' do
-      let(:thor_args) { %w(help) }
+      let(:thor_args) { %w[help] }
       it_behaves_like 'a `help` command'
     end
 
     context 'given `--help`' do
-      let(:thor_args) { %w(--help) }
+      let(:thor_args) { %w[--help] }
       it_behaves_like 'a `help` command'
     end
 
     context 'given `-h`' do
-      let(:thor_args) { %w(-h) }
+      let(:thor_args) { %w[-h] }
       it_behaves_like 'a `help` command'
     end
 
     context 'given `h`' do
-      let(:thor_args) { %w(h) }
+      let(:thor_args) { %w[h] }
       it_behaves_like 'a `help` command'
     end
 
     context 'given `he`' do
-      let(:thor_args) { %w(he) }
+      let(:thor_args) { %w[he] }
       it_behaves_like 'a `help` command'
     end
 
     context 'given `hel`' do
-      let(:thor_args) { %w(hel) }
+      let(:thor_args) { %w[hel] }
       it_behaves_like 'a `help` command'
     end
 
     context 'given `help mask`' do
-      let(:thor_args) { %w(help mask) }
+      let(:thor_args) { %w[help mask] }
       let(:help) do
         <<-EOS
 Usage:
@@ -300,7 +300,7 @@ Mask sensitive values in a SQL file
     end
 
     context 'given `help version`' do
-      let(:thor_args) { %w(help version) }
+      let(:thor_args) { %w[help version] }
       let(:help) do
         <<-EOS
 Usage:
@@ -313,7 +313,7 @@ Print the version
     end
 
     context 'given `help help`' do
-      let(:thor_args) { %w(help help) }
+      let(:thor_args) { %w[help help] }
       let(:help) do
         <<-EOS
 Usage:
@@ -326,12 +326,12 @@ Describe available commands or one specific command
     end
 
     context 'given `abc`' do
-      let(:thor_args) { %w(abc) }
+      let(:thor_args) { %w[abc] }
       it { is_expected.to output(%(Could not find command "abc".\n)).to_stderr }
     end
 
     context 'given `helpp`' do
-      let(:thor_args) { %w(helpp) }
+      let(:thor_args) { %w[helpp] }
       it { is_expected.to output(%(Could not find command "helpp".\n)).to_stderr }
     end
   end

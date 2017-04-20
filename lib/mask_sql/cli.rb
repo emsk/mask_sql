@@ -29,7 +29,7 @@ module MaskSQL
     end
 
     desc 'version, -v, --version', 'Print the version'
-    map %w(-v --version) => :version
+    map %w[-v --version] => :version
 
     def version
       puts "mask_sql #{MaskSQL::VERSION}"

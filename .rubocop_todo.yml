@@ -75,15 +75,6 @@ Style/NumericPredicate:
     - 'spec/**/*'
     - 'lib/mask_sql/converter.rb'
 
-# Offense count: 39
-# Cop supports --auto-correct.
-# Configuration parameters: PreferredDelimiters.
-Style/PercentLiteralDelimiters:
-  Exclude:
-    - 'lib/mask_sql/cli.rb'
-    - 'mask_sql.gemspec'
-    - 'spec/mask_sql/cli_spec.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: AllowForAlignment.
