@@ -2,3 +2,7 @@ inherit_from: .rubocop_todo.yml
 
 AllCops:
   DisplayCopNames: true
+
+Style/TrailingWhitespace:
+  Exclude:
+    - 'spec/mask_sql/cli_spec.rb'

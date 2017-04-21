@@ -81,9 +81,3 @@ Style/NumericPredicate:
 Style/SpaceAroundOperators:
   Exclude:
     - 'mask_sql.gemspec'
-
-# Offense count: 6
-# Cop supports --auto-correct.
-Style/TrailingWhitespace:
-  Exclude:
-    - 'spec/mask_sql/cli_spec.rb'
