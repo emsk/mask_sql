@@ -74,10 +74,3 @@ Style/NumericPredicate:
   Exclude:
     - 'spec/**/*'
     - 'lib/mask_sql/converter.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment.
-Style/SpaceAroundOperators:
-  Exclude:
-    - 'mask_sql.gemspec'
