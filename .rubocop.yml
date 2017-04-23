@@ -3,6 +3,10 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   DisplayCopNames: true
 
+Lint/NonLocalExitFromIterator:
+  Exclude:
+    - 'lib/mask_sql/converter.rb'
+
 Style/TrailingWhitespace:
   Exclude:
     - 'spec/mask_sql/cli_spec.rb'

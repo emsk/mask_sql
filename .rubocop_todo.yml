@@ -6,11 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 2
-Lint/NonLocalExitFromIterator:
-  Exclude:
-    - 'lib/mask_sql/converter.rb'
-
 # Offense count: 1
 Metrics/AbcSize:
   Max: 44
