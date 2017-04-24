@@ -38,13 +38,6 @@ Style/Documentation:
     - 'lib/mask_sql/cli.rb'
     - 'lib/mask_sql/converter.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
-Style/ExtraSpacing:
-  Exclude:
-    - 'mask_sql.gemspec'
-
 # Offense count: 4
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
