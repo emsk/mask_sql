@@ -48,10 +48,12 @@ module MaskSQL
           return
         end
 
+        all_values = parse_all_values(matched_line[:all_values])
+
         columns = target['columns']
         indexes = target['indexes'].keys
 
-        record_values = CSV.parse(matched_line[:all_values])[0].each_slice(columns).to_a
+        record_values = all_values.each_slice(columns).to_a
         record_values.map!.with_index(1) do |values, record_index|
           indexes.each do |mask_index|
             before_value = values[mask_index]
@@ -117,6 +119,39 @@ module MaskSQL
       when :copy
         /(?<copy_sql>COPY\s*`?#{table}`?.*FROM stdin;)/i
       end
+    end
+
+    def parse_all_values(matched_all_values)
+      all_values = CSV.parse(matched_all_values)[0]
+      processing_index = 0
+
+      all_values.map!.with_index do |value, index|
+        next if index != 0 && index <= processing_index
+
+        if start_string?(value)
+          processing_value = value.dup
+          processing_index = index
+
+          until end_string?(processing_value)
+            processing_index += 1
+            processing_value += all_values[processing_index]
+          end
+
+          value = processing_value
+        end
+
+        value
+      end
+
+      all_values.compact
+    end
+
+    def start_string?(value)
+      value == "'" || value == "('" || (value.start_with?("'", "('") && !value.end_with?("'", "')"))
+    end
+
+    def end_string?(value)
+      value != "'" && value != "('" && value.end_with?("'", "')")
     end
   end
 end
