@@ -20,8 +20,8 @@ module MaskSQL
       @matched_copy = {}
     end
 
-    def mask
-      encoding = NKF.guess(File.read(@options[:in])).name
+    def mask(encoding = nil)
+      encoding ||= NKF.guess(File.read(@options[:in])).name
 
       File.open(@options[:out], "w:#{encoding}") do |out_file|
         File.open(@options[:in], "r:#{encoding}") do |in_file|
@@ -29,6 +29,12 @@ module MaskSQL
             @matched_copy.empty? ? write_line(line, out_file) : write_copy_line(line, out_file)
           end
         end
+      end
+    rescue Encoding::UndefinedConversionError => e
+      if encoding == Encoding::UTF_8.name
+        raise Encoding::UndefinedConversionError, e.message
+      else
+        mask(Encoding::UTF_8.name)
       end
     end
 
