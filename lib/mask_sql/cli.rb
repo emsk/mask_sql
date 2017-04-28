@@ -25,7 +25,6 @@ module MaskSQL
 
       converter = Converter.new(converter_options)
       converter.mask
-      puts "\e[32mDone.\e[0m"
     end
 
     desc 'version, -v, --version', 'Print the version'
