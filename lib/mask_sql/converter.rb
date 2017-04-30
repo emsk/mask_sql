@@ -63,7 +63,7 @@ module MaskSQL
             values[mask_index] = target['indexes'][mask_index].gsub(@mark, record_index.to_s)
             values[mask_index].insert(0, "'") if before_value.start_with?("'", "('")
             values[mask_index].insert(-1, "'") if before_value.end_with?("'", "')")
-            values[mask_index].insert(0, '(') if mask_index == 0
+            values[mask_index].insert(0, '(') if mask_index.zero?
             values[mask_index].insert(-1, ')') if mask_index == columns - 1
           end
           values
