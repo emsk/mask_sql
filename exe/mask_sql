@@ -3,4 +3,3 @@
 require 'mask_sql'
 
 MaskSQL::CLI.start
-puts "\e[32mDone.\e[0m"
