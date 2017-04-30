@@ -1,4 +1,3 @@
-require 'csv'
 require 'yaml'
 require 'nkf'
 
@@ -83,7 +82,7 @@ module MaskSQL
         return
       end
 
-      record_values = CSV.parse(line, col_sep: "\t")[0]
+      record_values = line.split("\t")
       @matched_copy[:indexes].each do |mask_index, mask_value|
         record_values[mask_index] = mask_value.sub(/\A'/, '')
           .sub(/'\z/, '')
@@ -125,7 +124,7 @@ module MaskSQL
     end
 
     def parse_all_values(matched_all_values)
-      all_values = CSV.parse(matched_all_values)[0]
+      all_values = matched_all_values.chomp.split(',')
       processing_index = 0
 
       all_values.map!.with_index do |value, index|
