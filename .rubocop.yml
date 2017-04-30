@@ -7,9 +7,12 @@ Lint/NonLocalExitFromIterator:
   Exclude:
     - 'lib/mask_sql/converter.rb'
 
+Style/IndentHeredoc:
+  Exclude:
+    - 'spec/mask_sql/cli_spec.rb'
+
 Style/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
 Style/TrailingWhitespace:
-  Exclude:
-    - 'spec/mask_sql/cli_spec.rb'
+  Enabled: false
