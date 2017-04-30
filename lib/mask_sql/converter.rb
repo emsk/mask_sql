@@ -31,11 +31,8 @@ module MaskSQL
         end
       end
     rescue Encoding::UndefinedConversionError => e
-      if encoding == Encoding::UTF_8.name
-        raise Encoding::UndefinedConversionError, e.message
-      else
-        mask(Encoding::UTF_8.name)
-      end
+      raise Encoding::UndefinedConversionError, e.message if encoding == Encoding::UTF_8.name
+      mask(Encoding::UTF_8.name)
     end
 
     private
