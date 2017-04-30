@@ -33,6 +33,10 @@ Commands:
         let!(:external_encoding) { Encoding::Shift_JIS.name }
         let!(:in_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/original_sjis.sql"), encoding: Encoding::Shift_JIS) }
         let!(:masked_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/masked_#{sql_kind}_sjis.sql"), encoding: Encoding::Shift_JIS) }
+      elsif options[:encoding] == 'ascii'
+        let!(:external_encoding) { Encoding::ASCII.name }
+        let!(:in_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/original_ascii.sql"), encoding: Encoding::ASCII) }
+        let!(:masked_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/masked_#{sql_kind}_ascii.sql"), encoding: Encoding::ASCII) }
       end
 
       before do
@@ -42,6 +46,18 @@ Commands:
         expect(File).to receive(:read).with('in.sql').and_return(in_sql)
         expect(File).to receive(:open).with('out.sql', "w:#{external_encoding}").and_yield(out_file)
         expect(File).to receive(:open).with('in.sql', "r:#{external_encoding}").and_yield(in_sql)
+
+        if !options.nil? && options[:encoding] == 'ascii'
+          expect(File).to receive(:open).with('out.sql', "w:#{Encoding::UTF_8.name}").and_yield(out_file)
+          expect(File).to receive(:open).with('in.sql', "r:#{Encoding::UTF_8.name}").and_yield(in_sql)
+          allow(out_file).to receive(:puts).and_call_original
+
+          @call_count = 0
+          expect(out_file).to receive(:puts) do
+            @call_count += 1
+            raise Encoding::UndefinedConversionError if @call_count == 1
+          end
+        end
 
         described_class.start(thor_args)
       end
@@ -57,6 +73,34 @@ Commands:
 
       it { is_expected.to raise_error(Errno::ENOENT, /No such file or directory( @ rb_sysopen)? - #{config_file_path}/) }
     end
+  end
+
+  shared_examples_for 'a `mask` command with full options and Encoding::UndefinedConversionError' do |options|
+    let(:config) { YAML.load_file("#{File.dirname(__FILE__)}/../sqls/.mask.yml") }
+    let(:out_file) { StringIO.new }
+    let!(:external_encoding) { Encoding::ASCII.name }
+    let!(:in_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/original_ascii.sql"), encoding: Encoding::ASCII) }
+
+    before do
+      out_file.set_encoding(external_encoding)
+      expect(File).to receive(:expand_path).with('config.yml').and_return(config_file_path)
+      expect(YAML).to receive(:load_file).with(config_file_path).and_return(config)
+      expect(File).to receive(:read).with('in.sql').and_return(in_sql)
+      expect(File).to receive(:open).with('out.sql', "w:#{external_encoding}").and_yield(out_file)
+      expect(File).to receive(:open).with('in.sql', "r:#{external_encoding}").and_yield(in_sql)
+      expect(File).to receive(:open).with('out.sql', "w:#{Encoding::UTF_8.name}").and_yield(out_file)
+      expect(File).to receive(:open).with('in.sql', "r:#{Encoding::UTF_8.name}").and_yield(in_sql)
+
+      @call_count = 0
+      expect(out_file).to receive(:puts).at_least(1) do
+        @call_count += 1
+        raise Encoding::UndefinedConversionError if @call_count == 1
+        raise Encoding::UndefinedConversionError, 'ABC' if @call_count == 2
+      end
+    end
+
+    subject { -> { described_class.start(thor_args) } }
+    it { is_expected.to raise_error(Encoding::UndefinedConversionError, 'ABC') }
   end
 
   shared_examples_for 'a `mask` command with required options' do
@@ -114,6 +158,14 @@ Commands:
 
       context 'when the input file encoding is Shift_JIS' do
         it_behaves_like 'a `mask` command with full options', encoding: 'sjis'
+      end
+
+      context 'when the input file encoding is US-ASCII' do
+        it_behaves_like 'a `mask` command with full options', encoding: 'ascii'
+      end
+
+      context 'when the input file encoding is US-ASCII and UTF-8' do
+        it_behaves_like 'a `mask` command with full options and Encoding::UndefinedConversionError'
       end
     end
 
