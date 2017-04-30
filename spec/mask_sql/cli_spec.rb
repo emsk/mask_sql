@@ -75,7 +75,7 @@ Commands:
     end
   end
 
-  shared_examples_for 'a `mask` command with full options and Encoding::UndefinedConversionError' do |options|
+  shared_examples_for 'a `mask` command with full options and Encoding::UndefinedConversionError' do
     let(:config) { YAML.load_file("#{File.dirname(__FILE__)}/../sqls/.mask.yml") }
     let(:out_file) { StringIO.new }
     let!(:external_encoding) { Encoding::ASCII.name }
