@@ -76,7 +76,7 @@ module MaskSQL
     end
 
     def write_copy_line(line, output_file)
-      if /\A\\.\Z/ =~ line
+      if /^\\.$/ =~ line
         output_file.puts line
         @matched_copy.clear
         return
@@ -84,8 +84,8 @@ module MaskSQL
 
       record_values = line.split("\t")
       @matched_copy[:indexes].each do |mask_index, mask_value|
-        record_values[mask_index] = mask_value.sub(/\A'/, '')
-          .sub(/'\z/, '')
+        record_values[mask_index] = mask_value.sub(/^'/, '')
+          .sub(/'$/, '')
           .gsub(@mark, @matched_copy[:record_index].to_s)
       end
 
@@ -115,11 +115,11 @@ module MaskSQL
     def sql_regexp(table, sql_kind)
       case sql_kind
       when :insert
-        /\A(?<prefix>INSERT (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)\Z/i
+        /^(?<prefix>INSERT (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)$/i
       when :replace
-        /\A(?<prefix>REPLACE (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)\Z/i
+        /^(?<prefix>REPLACE (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)$/i
       when :copy
-        /(?<copy_sql>COPY\s*`?#{table}`?.*FROM stdin;)/i
+        /^(?<copy_sql>COPY\s*`?#{table}`?.*FROM stdin;)$/i
       end
     end
 
