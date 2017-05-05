@@ -3,6 +3,7 @@ RSpec.describe MaskSQL::CLI do
     <<-EOS
 Commands:
   #{command} help [COMMAND]                                            # Describe available commands or one specific command
+  #{command} init                                                      # Generate a config file
   #{command} mask -i, --in=INPUT FILE PATH -o, --out=OUTPUT FILE PATH  # Mask sensitive values in a SQL file
   #{command} version, -v, --version                                    # Print the version
 
@@ -283,6 +284,16 @@ Commands:
     context 'given `-o out.sql -c config.yml`' do
       let(:thor_args) { %w[-o out.sql -c config.yml] }
       it { is_expected.to output("No value provided for required options '--in'\n").to_stderr }
+    end
+
+    context 'given `init`' do
+      let(:thor_args) { %w[init] }
+
+      before do
+        expect(MaskSQL::Initializer).to receive(:copy_template).and_return('ABC')
+      end
+
+      it { is_expected.to output("ABC\n").to_stdout }
     end
 
     context 'given `version`' do

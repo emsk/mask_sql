@@ -1,5 +1,6 @@
 require 'thor'
 require 'mask_sql/converter'
+require 'mask_sql/initializer'
 
 module MaskSQL
   class CLI < Thor
@@ -26,6 +27,12 @@ module MaskSQL
       converter = Converter.new(converter_options)
       converter.mask
       puts "\e[32mDone.\e[0m"
+    end
+
+    desc 'init', 'Generate a config file'
+
+    def init
+      puts Initializer.copy_template
     end
 
     desc 'version, -v, --version', 'Print the version'
