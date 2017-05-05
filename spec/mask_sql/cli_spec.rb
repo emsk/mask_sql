@@ -362,6 +362,19 @@ Mask sensitive values in a SQL file
       it_behaves_like 'a `help` command'
     end
 
+    context 'given `help init`' do
+      let(:thor_args) { %w[help init] }
+      let(:help) do
+        <<-EOS
+Usage:
+  #{command} init
+
+Generate a config file
+        EOS
+      end
+      it_behaves_like 'a `help` command'
+    end
+
     context 'given `help version`' do
       let(:thor_args) { %w[help version] }
       let(:help) do
