@@ -11,6 +11,10 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
 
+Metrics/LineLength:
+  Exclude:
+    - 'spec/**/*'
+
 Style/IndentHeredoc:
   Exclude:
     - 'spec/mask_sql/cli_spec.rb'
