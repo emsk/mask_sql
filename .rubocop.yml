@@ -7,6 +7,10 @@ Lint/NonLocalExitFromIterator:
   Exclude:
     - 'lib/mask_sql/converter.rb'
 
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
 Style/IndentHeredoc:
   Exclude:
     - 'spec/mask_sql/cli_spec.rb'
