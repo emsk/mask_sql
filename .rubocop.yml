@@ -11,6 +11,9 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
 
+Metrics/ClassLength:
+  Enabled: false
+
 Metrics/LineLength:
   Exclude:
     - 'spec/**/*'
