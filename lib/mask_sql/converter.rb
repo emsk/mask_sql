@@ -53,22 +53,12 @@ module MaskSQL
         all_values = parse_all_values(matched_line[:all_values])
 
         columns = target['columns']
-        indexes = target['indexes'].keys
+        indexes = target['indexes']
 
-        record_values = all_values.each_slice(columns).to_a
-        record_values.map!.with_index(1) do |values, record_index|
-          indexes.each do |mask_index|
-            before_value = values[mask_index]
-            values[mask_index] = target['indexes'][mask_index].gsub(@mark, record_index.to_s)
-            values[mask_index].insert(0, "'") if before_value.start_with?("'", "('")
-            values[mask_index].insert(-1, "'") if before_value.end_with?("'", "')")
-            values[mask_index].insert(0, '(') if mask_index.zero?
-            values[mask_index].insert(-1, ')') if mask_index == columns - 1
-          end
-          values
-        end
+        record_values = get_record_values(all_values, columns)
+        masked_values = mask_values(record_values, columns, indexes)
 
-        output_file.puts "#{matched_line[:prefix]}#{record_values.join(',')}#{matched_line[:suffix]}"
+        output_file.puts "#{matched_line[:prefix]}#{masked_values.join(',')}#{matched_line[:suffix]}"
         return
       end
 
@@ -154,6 +144,27 @@ module MaskSQL
 
     def end_string?(value)
       value != "'" && value != "('" && value.end_with?("'", "')")
+    end
+
+    def get_record_values(all_values, columns)
+      all_values.each_slice(columns).to_a
+    end
+
+    def mask_values(record_values, columns, indexes)
+      record_values.map!.with_index(1) do |values, record_index|
+        indexes.each_key do |mask_index|
+          before_value = values[mask_index]
+          values[mask_index] = indexes[mask_index].gsub(@mark, record_index.to_s)
+          values[mask_index].insert(0, "'") if before_value.start_with?("'", "('")
+          values[mask_index].insert(-1, "'") if before_value.end_with?("'", "')")
+          values[mask_index].insert(0, '(') if mask_index.zero?
+          values[mask_index].insert(-1, ')') if mask_index == columns - 1
+        end
+
+        values
+      end
+
+      record_values
     end
   end
 end
