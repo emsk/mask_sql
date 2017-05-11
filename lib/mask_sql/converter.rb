@@ -38,14 +38,14 @@ module MaskSQL
 
     def write_line(line, output_file)
       @targets.each do |target|
-        table = target['table']
-        matched_line = match_line(line, table)
+        matched_line = match_line(line, target['table'])
         next unless matched_line
+
+        indexes = target['indexes']
 
         if matched_line.names.include?('copy_sql')
           output_file.puts line
-          @matched_copy[:sql] = matched_line[:copy_sql]
-          @matched_copy[:indexes] = target['indexes']
+          @matched_copy[:indexes] = indexes
           @matched_copy[:record_index] = 1
           return
         end
@@ -53,7 +53,6 @@ module MaskSQL
         all_values = parse_all_values(matched_line[:all_values])
 
         columns = target['columns']
-        indexes = target['indexes']
 
         record_values = get_record_values(all_values, columns)
         masked_values = mask_values(record_values, columns, indexes)
@@ -153,18 +152,23 @@ module MaskSQL
     def mask_values(record_values, columns, indexes)
       record_values.map!.with_index(1) do |values, record_index|
         indexes.each_key do |mask_index|
-          before_value = values[mask_index]
-          values[mask_index] = indexes[mask_index].gsub(@mark, record_index.to_s)
-          values[mask_index].insert(0, "'") if before_value.start_with?("'", "('")
-          values[mask_index].insert(-1, "'") if before_value.end_with?("'", "')")
-          values[mask_index].insert(0, '(') if mask_index.zero?
-          values[mask_index].insert(-1, ')') if mask_index == columns - 1
+          original_value = values[mask_index]
+          masked_value = indexes[mask_index].gsub(@mark, record_index.to_s)
+          values[mask_index] = mask_value(masked_value, original_value, mask_index, columns)
         end
 
         values
       end
 
       record_values
+    end
+
+    def mask_value(masked_value, original_value, mask_index, columns)
+      masked_value.insert(0, "'") if original_value.start_with?("'", "('")
+      masked_value.insert(-1, "'") if original_value.end_with?("'", "')")
+      masked_value.insert(0, '(') if mask_index.zero?
+      masked_value.insert(-1, ')') if mask_index == columns - 1
+      masked_value
     end
   end
 end
