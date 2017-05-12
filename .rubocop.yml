@@ -18,8 +18,7 @@ Metrics/ClassLength:
   Enabled: false
 
 Metrics/LineLength:
-  Exclude:
-    - 'spec/**/*'
+  Enabled: false
 
 Style/IndentHeredoc:
   Exclude:
