@@ -83,33 +83,31 @@ module MaskSQL
     end
 
     def match_line(line, table)
-      if @options[:insert]
-        matched_line = sql_regexp(table, :insert).match(line)
-        return matched_line if matched_line
-      end
+      matched_line = match_insert(line, table)
+      return matched_line if matched_line
 
-      if @options[:replace]
-        matched_line = sql_regexp(table, :replace).match(line)
-        return matched_line if matched_line
-      end
+      matched_line = match_replace(line, table)
+      return matched_line if matched_line
 
-      if @options[:copy]
-        matched_line = sql_regexp(table, :copy).match(line)
-        return matched_line if matched_line
-      end
+      matched_line = match_copy(line, table)
+      return matched_line if matched_line
 
       nil
     end
 
-    def sql_regexp(table, sql_kind)
-      case sql_kind
-      when :insert
-        /^(?<prefix>INSERT (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)$/i
-      when :replace
-        /^(?<prefix>REPLACE (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)$/i
-      when :copy
-        /^(?<copy_sql>COPY\s*`?#{table}`?.*FROM stdin;)$/i
-      end
+    def match_insert(line, table)
+      return unless @options[:insert]
+      /^(?<prefix>INSERT (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)$/i.match(line)
+    end
+
+    def match_replace(line, table)
+      return unless @options[:replace]
+      /^(?<prefix>REPLACE (INTO)?\s*`?#{table}`?.*VALUES\s*)(?<all_values>[^;]+)(?<suffix>;?)$/i.match(line)
+    end
+
+    def match_copy(line, table)
+      return unless @options[:copy]
+      /^(?<copy_sql>COPY\s*`?#{table}`?.*FROM stdin;)$/i.match(line)
     end
 
     def parse_all_values(matched_all_values)
