@@ -15,6 +15,8 @@ module MaskSQL
     option :copy, type: :boolean, banner: 'MASK `COPY` SQL'
 
     def mask
+      return unless validate_options
+
       converter_options = options.dup
 
       if options[:config]
@@ -40,6 +42,20 @@ module MaskSQL
 
     def version
       puts "mask_sql #{MaskSQL::VERSION}"
+    end
+
+    private
+
+    def validate_options
+      in_file = File.expand_path(options[:in])
+      out_file = File.expand_path(options[:out])
+
+      if in_file == out_file
+        warn "\e[31mOutput file is the same as input file.\e[0m"
+        return false
+      end
+
+      true
     end
   end
 end

@@ -41,6 +41,8 @@ Commands:
       end
 
       before do
+        expect(File).to receive(:expand_path).with('in.sql').and_return('in.sql')
+        expect(File).to receive(:expand_path).with('out.sql').and_return('out.sql')
         out_file.set_encoding(external_encoding)
         expect(File).to receive(:expand_path).with('config.yml').and_return(config_file_path)
         expect(YAML).to receive(:load_file).with(config_file_path).and_return(config)
@@ -69,6 +71,8 @@ Commands:
 
     context 'when the config file does not exist' do
       before do
+        expect(File).to receive(:expand_path).with('in.sql').and_return('in.sql')
+        expect(File).to receive(:expand_path).with('out.sql').and_return('out.sql')
         expect(File).to receive(:expand_path).with('config.yml').and_return(config_file_path)
       end
 
@@ -83,6 +87,8 @@ Commands:
     let!(:in_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/original_ascii.sql"), encoding: Encoding::ASCII) }
 
     before do
+      expect(File).to receive(:expand_path).with('in.sql').and_return('in.sql')
+      expect(File).to receive(:expand_path).with('out.sql').and_return('out.sql')
       out_file.set_encoding(external_encoding)
       expect(File).to receive(:expand_path).with('config.yml').and_return(config_file_path)
       expect(YAML).to receive(:load_file).with(config_file_path).and_return(config)
@@ -112,6 +118,8 @@ Commands:
       let!(:masked_sql) { File.read(File.expand_path("#{File.dirname(__FILE__)}/../sqls/masked_all.sql")) }
 
       before do
+        expect(File).to receive(:expand_path).with('in.sql').and_return('in.sql')
+        expect(File).to receive(:expand_path).with('out.sql').and_return('out.sql')
         expect(File).to receive(:expand_path).with('.mask.yml').and_return(config_file_path)
         expect(File).to receive(:exist?).with(config_file_path).and_return(true)
         expect(YAML).to receive(:load_file).with(config_file_path).and_return(config)
@@ -128,6 +136,8 @@ Commands:
 
     context 'when a config file does not exist in the current directory' do
       before do
+        expect(File).to receive(:expand_path).with('in.sql').and_return('in.sql')
+        expect(File).to receive(:expand_path).with('out.sql').and_return('out.sql')
         expect(File).to receive(:expand_path).with('.mask.yml').and_return(config_file_path)
         expect(File).to receive(:exist?).with(config_file_path).and_return(false)
       end
@@ -284,6 +294,16 @@ Commands:
     context 'given `-o out.sql -c config.yml`' do
       let(:thor_args) { %w[-o out.sql -c config.yml] }
       it { is_expected.to output("No value provided for required options '--in'\n").to_stderr }
+    end
+
+    context 'given `mask -i in.sql -o in.sql`' do
+      let(:thor_args) { %w[mask -i in.sql -o in.sql] }
+      it { is_expected.to output("\e[31mOutput file is the same as input file.\e[0m\n").to_stderr }
+    end
+
+    context 'given `-i in.sql -o in.sql`' do
+      let(:thor_args) { %w[-i in.sql -o in.sql] }
+      it { is_expected.to output("\e[31mOutput file is the same as input file.\e[0m\n").to_stderr }
     end
 
     context 'given `init`' do
