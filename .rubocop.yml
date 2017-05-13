@@ -20,6 +20,9 @@ Metrics/ClassLength:
 Metrics/LineLength:
   Enabled: false
 
+Metrics/MethodLength:
+  Max: 20
+
 Style/IndentHeredoc:
   Exclude:
     - 'spec/mask_sql/cli_spec.rb'
