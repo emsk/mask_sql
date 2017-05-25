@@ -25,7 +25,12 @@ module MaskSQL
       File.open(@options[:out], "w:#{encoding}") do |out_file|
         File.open(@options[:in], "r:#{encoding}") do |in_file|
           in_file.each_line do |line|
-            @matched_copy.empty? ? write_line(line, out_file) : write_copy_line(line, out_file)
+            if @matched_copy.empty?
+              @counters = []
+              write_line(line, out_file)
+            else
+              write_copy_line(line, out_file)
+            end
           end
         end
       end
@@ -41,27 +46,29 @@ module MaskSQL
         matched_line = match_line(line, target['table'])
         next unless matched_line
 
-        indexes = target['indexes']
-
         if matched_line.names.include?('copy_sql')
           output_file.puts line
-          @matched_copy[:indexes] = indexes
-          @matched_copy[:record_index] = 1
+          init_matched_copy(target)
           return
         end
 
         all_values = parse_all_values(matched_line[:all_values])
 
-        columns = target['columns']
-
-        record_values = get_record_values(all_values, columns)
-        masked_values = mask_values(record_values, columns, indexes)
+        record_values = get_record_values(all_values, target['columns'])
+        masked_values = mask_values(record_values, target)
 
         output_file.puts "#{matched_line[:prefix]}#{masked_values.join(',')}#{matched_line[:suffix]}"
         return
       end
 
       output_file.puts line
+    end
+
+    def init_matched_copy(target)
+      @matched_copy[:indexes] = target['indexes']
+      @matched_copy[:condition_indexes] = target['condition_indexes'] || []
+      @matched_copy[:record_index] = 1
+      @counters = []
     end
 
     def write_copy_line(line, output_file)
@@ -72,10 +79,12 @@ module MaskSQL
       end
 
       record_values = line.split("\t")
+      count = get_current_count(record_values, @matched_copy[:record_index], @matched_copy[:condition_indexes])
+
       @matched_copy[:indexes].each do |mask_index, mask_value|
         record_values[mask_index] = mask_value.sub(/^'/, '')
           .sub(/'$/, '')
-          .gsub(@mark, @matched_copy[:record_index].to_s)
+          .gsub(@mark, count.to_s)
       end
 
       output_file.puts record_values.join("\t")
@@ -147,11 +156,17 @@ module MaskSQL
       all_values.each_slice(columns).to_a
     end
 
-    def mask_values(record_values, columns, indexes)
+    def mask_values(record_values, target)
+      columns = target['columns']
+      indexes = target['indexes']
+      condition_indexes = target['condition_indexes'] || []
+
       record_values.map!.with_index(1) do |values, record_index|
+        count = get_current_count(values, record_index, condition_indexes)
+
         indexes.each_key do |mask_index|
           original_value = values[mask_index]
-          masked_value = indexes[mask_index].gsub(@mark, record_index.to_s)
+          masked_value = indexes[mask_index].gsub(@mark, count.to_s)
           values[mask_index] = mask_value(masked_value, original_value, mask_index, columns)
         end
 
@@ -159,6 +174,30 @@ module MaskSQL
       end
 
       record_values
+    end
+
+    def get_current_count(values, record_index, condition_indexes)
+      return record_index if condition_indexes.empty?
+
+      condition_values = condition_indexes.map do |condition_index|
+        values[condition_index]
+      end
+      increment_count(condition_values)
+    end
+
+    def increment_count(condition_values)
+      counter = @counters.find do |c|
+        c[:label] == condition_values
+      end
+
+      if counter
+        counter[:count] += 1
+      else
+        counter = { label: condition_values, count: 1 }
+        @counters.push(counter)
+      end
+
+      counter[:count]
     end
 
     def mask_value(masked_value, original_value, mask_index, columns)

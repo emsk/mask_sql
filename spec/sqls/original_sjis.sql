@@ -38,6 +38,9 @@ INSERT `cats` VALUES ('01','Sora'),('02','Hana'),('03','Leo')
 INSERT `cats`VALUES('01','Sora'),('02','Hana'),('03','Leo');
 INSERT cats VALUES ('01','Sora'),('02','Hana'),('03','Leo');
 
+INSERT INTO `dogs` (`code`, `name`, `house_id`, `room_id`) VALUES ('01','Pochi',1,1),('02','Rose',1,1),('03','Momo',1,1),('04','Sakura',1,1);
+INSERT INTO `dogs` (`code`, `name`, `house_id`, `room_id`) VALUES ('01','Pochi',1,1),('02','Rose',2,1),('03','Momo',1,1),('04','Sakura',1,2);
+
 REPLACE INTO `people` (`id`, `code`, `name`, `email`) VALUES (1,'01','ç‚ñ{ó¥în','ryoma-sakamoto@example.com'),(2,'02','çÇêôêWçÏ','shinsaku-takasugi@example.com'),(3,'03','â´ìcëçéi','soji-okita@example.com');
 REPLACE INTO `people` (`id`, `code`, `name`, `email`) VALUES (1,'01',',ç‚,ñ{,ó¥,în,','ryoma-sakamoto@example.com'),(2,'02','çÇ,êô,êW,çÏ,','shinsaku-takasugi@example.com'),(3,'03',',â´,ìc,ëç,éi','soji-okita@example.com');
 REPLACE INTO `people` (`id`, `code`, `name`, `email`) VALUES (1,'01','ç‚ñ{ó¥în','ryoma-sakamoto@example.com'),(2,'02','çÇêôêWçÏ','shinsaku-takasugi@example.com'),(3,'03','â´ìcëçéi','soji-okita@example.com')
@@ -78,6 +81,9 @@ REPLACE `cats` VALUES ('01','Sora'),('02','Hana'),('03','Leo')
 REPLACE `cats`VALUES('01','Sora'),('02','Hana'),('03','Leo');
 REPLACE cats VALUES ('01','Sora'),('02','Hana'),('03','Leo');
 
+REPLACE INTO `dogs` (`code`, `name`, `house_id`, `room_id`) VALUES ('01','Pochi',1,1),('02','Rose',1,1),('03','Momo',1,1),('04','Sakura',1,1);
+REPLACE INTO `dogs` (`code`, `name`, `house_id`, `room_id`) VALUES ('01','Pochi',1,1),('02','Rose',2,1),('03','Momo',1,1),('04','Sakura',1,2);
+
 COPY people (id, code, name, email) FROM stdin;
 1	01	ç‚ñ{ó¥în	ryoma-sakamoto@example.com
 2	02	çÇêôêWçÏ	shinsaku-takasugi@example.com
@@ -94,4 +100,18 @@ copy cats (code, name) from stdin;
 01	Sora
 02	Hana
 03	Leo
+\.
+
+COPY dogs (code, name, house_id, room_id) FROM stdin;
+01	Pochi	1	1
+02	Rose	1	1
+03	Momo	1	1
+04	Sakura	1	1
+\.
+
+COPY dogs (code, name, house_id, room_id) FROM stdin;
+01	Pochi	1	1
+02	Rose	2	1
+03	Momo	1	1
+04	Sakura	1	2
 \.
