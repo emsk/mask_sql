@@ -3,6 +3,16 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   DisplayCopNames: true
 
+Layout/IndentHeredoc:
+  Exclude:
+    - 'spec/mask_sql/cli_spec.rb'
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/TrailingWhitespace:
+  Enabled: false
+
 Lint/NonLocalExitFromIterator:
   Exclude:
     - 'lib/mask_sql/converter.rb'
@@ -22,13 +32,3 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Max: 20
-
-Style/IndentHeredoc:
-  Exclude:
-    - 'spec/mask_sql/cli_spec.rb'
-
-Style/MultilineMethodCallIndentation:
-  EnforcedStyle: indented
-
-Style/TrailingWhitespace:
-  Enabled: false
