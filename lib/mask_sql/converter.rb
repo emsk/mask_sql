@@ -65,8 +65,8 @@ module MaskSQL
     end
 
     def init_matched_copy(target)
-      @matched_copy[:indexes] = target['indexes']
-      @matched_copy[:condition_indexes] = target['condition_indexes'] || []
+      @matched_copy[:dummy_values] = target['dummy_values']
+      @matched_copy[:group_indexes] = target['group_indexes'] || []
       @matched_copy[:record_index] = 1
       @counters = []
     end
@@ -79,10 +79,10 @@ module MaskSQL
       end
 
       record_values = line.split("\t")
-      count = get_current_count(record_values, @matched_copy[:record_index], @matched_copy[:condition_indexes])
+      count = get_current_count(record_values, @matched_copy[:record_index], @matched_copy[:group_indexes])
 
-      @matched_copy[:indexes].each do |mask_index, mask_value|
-        record_values[mask_index] = mask_value.sub(/^'/, '')
+      @matched_copy[:dummy_values].each do |dummy_index, dummy_value|
+        record_values[dummy_index] = dummy_value.sub(/^'/, '')
           .sub(/'$/, '')
           .gsub(@mark, count.to_s)
       end
@@ -158,16 +158,16 @@ module MaskSQL
 
     def mask_values(record_values, target)
       columns = target['columns']
-      indexes = target['indexes']
-      condition_indexes = target['condition_indexes'] || []
+      dummy_values = target['dummy_values']
+      group_indexes = target['group_indexes'] || []
 
       record_values.map!.with_index(1) do |values, record_index|
-        count = get_current_count(values, record_index, condition_indexes)
+        count = get_current_count(values, record_index, group_indexes)
 
-        indexes.each_key do |mask_index|
-          original_value = values[mask_index]
-          masked_value = indexes[mask_index].gsub(@mark, count.to_s)
-          values[mask_index] = mask_value(masked_value, original_value, mask_index, columns)
+        dummy_values.each_key do |dummy_index|
+          original_value = values[dummy_index]
+          masked_value = dummy_values[dummy_index].gsub(@mark, count.to_s)
+          values[dummy_index] = mask_value(masked_value, original_value, dummy_index, columns)
         end
 
         values
@@ -176,24 +176,24 @@ module MaskSQL
       record_values
     end
 
-    def get_current_count(values, record_index, condition_indexes)
-      return record_index if condition_indexes.empty?
+    def get_current_count(values, record_index, group_indexes)
+      return record_index if group_indexes.empty?
 
-      condition_values = condition_indexes.map do |condition_index|
-        values[condition_index]
+      group_values = group_indexes.map do |group_index|
+        values[group_index]
       end
-      increment_count(condition_values)
+      increment_count(group_values)
     end
 
-    def increment_count(condition_values)
+    def increment_count(group_values)
       counter = @counters.find do |c|
-        c[:label] == condition_values
+        c[:label] == group_values
       end
 
       if counter
         counter[:count] += 1
       else
-        counter = { label: condition_values, count: 1 }
+        counter = { label: group_values, count: 1 }
         @counters.push(counter)
       end
 

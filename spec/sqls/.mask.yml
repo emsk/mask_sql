@@ -2,19 +2,19 @@ mark: '[mask]'
 targets:
   - table: people
     columns: 4
-    indexes:
+    dummy_values:
       2: 氏名[mask]
       3: email-[mask]@example.com
   - table: cats
     columns: 2
-    indexes:
+    dummy_values:
       0: code-[mask]
       1: Cat name [mask]
   - table: dogs
     columns: 4
-    indexes:
+    dummy_values:
       0: code-[mask]
       1: Dog name [mask]
-    condition_indexes:
+    group_indexes:
       - 2
       - 3
