@@ -172,6 +172,10 @@ targets:
 
 Bug reports and pull requests are welcome.
 
+## Related
+
+* [mruby-masksql](https://github.com/emsk/mruby-masksql) - An mruby implementation of the mask_sql
+
 ## License
 
 [MIT](LICENSE.txt)
