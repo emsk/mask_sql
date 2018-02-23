@@ -13,13 +13,6 @@ Gemspec/RequiredRubyVersion:
   Exclude:
     - 'mask_sql.gemspec'
 
-# Offense count: 5
-# Configuration parameters: Blacklist.
-# Blacklist: END, (?-mix:EO[A-Z]{1})
-Naming/HeredocDelimiterNaming:
-  Exclude:
-    - 'spec/mask_sql/cli_spec.rb'
-
 # Offense count: 3
 Style/Documentation:
   Exclude:

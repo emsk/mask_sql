@@ -32,3 +32,7 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Max: 20
+
+Naming/HeredocDelimiterNaming:
+  Exclude:
+    - 'spec/mask_sql/cli_spec.rb'
