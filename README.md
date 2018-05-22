@@ -4,7 +4,6 @@
 [![Build Status](https://travis-ci.org/emsk/mask_sql.svg?branch=master)](https://travis-ci.org/emsk/mask_sql)
 [![Coverage Status](https://coveralls.io/repos/github/emsk/mask_sql/badge.svg?branch=master)](https://coveralls.io/github/emsk/mask_sql)
 [![Code Climate](https://codeclimate.com/github/emsk/mask_sql/badges/gpa.svg)](https://codeclimate.com/github/emsk/mask_sql)
-[![Dependency Status](https://gemnasium.com/badges/github.com/emsk/mask_sql.svg)](https://gemnasium.com/github.com/emsk/mask_sql)
 [![Inline docs](http://inch-ci.org/github/emsk/mask_sql.svg?branch=master)](http://inch-ci.org/github/emsk/mask_sql)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
 
