@@ -36,3 +36,7 @@ Metrics/MethodLength:
 Naming/HeredocDelimiterNaming:
   Exclude:
     - 'spec/mask_sql/cli_spec.rb'
+
+Style/IfUnlessModifier:
+  Exclude:
+    - 'Gemfile'
