@@ -1,10 +1,10 @@
 # MaskSQL
 
 [![Gem Version](https://badge.fury.io/rb/mask_sql.svg)](https://badge.fury.io/rb/mask_sql)
-[![Build Status](https://travis-ci.org/emsk/mask_sql.svg?branch=master)](https://travis-ci.org/emsk/mask_sql)
-[![Codecov](https://codecov.io/gh/emsk/mask_sql/branch/master/graph/badge.svg)](https://codecov.io/gh/emsk/mask_sql)
+[![Build Status](https://travis-ci.org/emsk/mask_sql.svg?branch=main)](https://travis-ci.org/emsk/mask_sql)
+[![Codecov](https://codecov.io/gh/emsk/mask_sql/branch/main/graph/badge.svg)](https://codecov.io/gh/emsk/mask_sql)
 [![Code Climate](https://codeclimate.com/github/emsk/mask_sql/badges/gpa.svg)](https://codeclimate.com/github/emsk/mask_sql)
-[![Inline docs](http://inch-ci.org/github/emsk/mask_sql.svg?branch=master)](http://inch-ci.org/github/emsk/mask_sql)
+[![Inline docs](http://inch-ci.org/github/emsk/mask_sql.svg?branch=main)](http://inch-ci.org/github/emsk/mask_sql)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
 
 MaskSQL is a command-line tool to mask sensitive values in a SQL file.
