@@ -428,7 +428,7 @@ Describe available commands or one specific command
 
     context 'given `helpp`' do
       let(:thor_args) { %w[helpp] }
-      it { is_expected.to output(%(Could not find command "helpp".\n)).to_stderr }
+      it { is_expected.to output(/Could not find command "helpp"\.\n/).to_stderr }
     end
   end
 end
