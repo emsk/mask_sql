@@ -2,6 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/mask_sql.svg)](https://badge.fury.io/rb/mask_sql)
 [![Build Status](https://travis-ci.org/emsk/mask_sql.svg?branch=main)](https://travis-ci.org/emsk/mask_sql)
+[![Build Status](https://dev.azure.com/emsk/mask_sql/_apis/build/status/emsk.mask_sql?branchName=main)](https://dev.azure.com/emsk/mask_sql/_build/latest?definitionId=5&branchName=main)
 [![Codecov](https://codecov.io/gh/emsk/mask_sql/branch/main/graph/badge.svg)](https://codecov.io/gh/emsk/mask_sql)
 [![Code Climate](https://codeclimate.com/github/emsk/mask_sql/badges/gpa.svg)](https://codeclimate.com/github/emsk/mask_sql)
 [![Inline docs](http://inch-ci.org/github/emsk/mask_sql.svg?branch=main)](http://inch-ci.org/github/emsk/mask_sql)
